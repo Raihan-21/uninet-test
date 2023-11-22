@@ -23,7 +23,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useCallback, useState, useEffect } from "react";
-import { addArticle, editArticle, getArticles } from "@/helpers/firebase";
+import { addData, editData, getDatas, deleteData } from "@/helpers/firebase";
 import SectionTitle from "@/components/molecules/SectionTitle";
 import { Article } from "@/types/data";
 
@@ -34,7 +34,7 @@ import { BsThreeDots } from "react-icons/bs";
 
 export const getServerSideProps = async () => {
   try {
-    const res = await getArticles("articles");
+    const res = await getDatas("articles");
 
     // console.log(JSON.stringify(res.result?.docs[0]));
     return {
@@ -74,19 +74,24 @@ export default function Home({ articleList }: { articleList: Article[] }) {
   }, []);
 
   const toast = useToast();
-  const submitForm = useCallback(
+  const addArticle = useCallback(
     async (e: any) => {
       e.preventDefault();
       try {
-        const { result } = await addArticle("articles", formData);
+        const { result } = await addData("articles", formData);
         setFormData({ title: "", content: "" });
         onAddClose();
         toast({
-          title: "Berhasil membuat artikel",
+          title: "Article Created",
           status: "success",
         });
+        setIsLoading(true);
+        const getRes = await getDatas("articles");
+        setArticles(getRes.result);
       } catch (error) {
         throw error;
+      } finally {
+        setIsLoading(false);
       }
     },
     [formData]
@@ -96,7 +101,7 @@ export default function Home({ articleList }: { articleList: Article[] }) {
       e.preventDefault();
       try {
         onEditClose();
-        const res = await editArticle(
+        const res = await editData(
           "articles",
           selectedArticle.id,
           selectedArticle
@@ -106,7 +111,7 @@ export default function Home({ articleList }: { articleList: Article[] }) {
           status: "success",
         });
         setIsLoading(true);
-        const getRes = await getArticles("articles");
+        const getRes = await getDatas("articles");
         setArticles(getRes.result);
       } catch (error) {
         throw error;
@@ -116,6 +121,20 @@ export default function Home({ articleList }: { articleList: Article[] }) {
     },
     [selectedArticle]
   );
+  const deleteArticle = useCallback(async (id: string) => {
+    try {
+      const res = await deleteData("articles", id);
+      console.log(res);
+      setIsLoading(true);
+      const getRes = await getDatas("articles");
+      toast({ title: "Article deleted", status: "success" });
+      setArticles(getRes.result);
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
   // const
   return (
     <>
@@ -143,7 +162,7 @@ export default function Home({ articleList }: { articleList: Article[] }) {
               <Text fontWeight={"bold"} fontSize={"larger"} marginBottom={5}>
                 Create new article
               </Text>
-              <form onSubmit={submitForm}>
+              <form onSubmit={addArticle}>
                 <FormControl>
                   <FormLabel>Title</FormLabel>
                   <Input
@@ -235,7 +254,11 @@ export default function Home({ articleList }: { articleList: Article[] }) {
                               <Text>Edit</Text>
                             </Flex>
                           </MenuItem>
-                          <MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              deleteArticle(article.id);
+                            }}
+                          >
                             <Flex alignItems={"center"} columnGap={2}>
                               <FaRegTrashAlt color="red" />
                               <Text color={"red"}>Delete</Text>

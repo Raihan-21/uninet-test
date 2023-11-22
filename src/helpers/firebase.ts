@@ -7,11 +7,12 @@ import {
   getDocs,
   query,
   setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
 
-const addArticle = async (collectionName: string, data: any) => {
+const addData = async (collectionName: string, data: any) => {
   let result = null;
   let error = null;
   try {
@@ -23,7 +24,7 @@ const addArticle = async (collectionName: string, data: any) => {
   return { result, error };
 };
 
-const editArticle = async (collectionName: string, id: string, data: any) => {
+const editData = async (collectionName: string, id: string, data: any) => {
   let result;
   let error;
   try {
@@ -34,7 +35,7 @@ const editArticle = async (collectionName: string, id: string, data: any) => {
   return { result, error };
 };
 
-const getArticles = async (collectionName: string) => {
+const getDatas = async (collectionName: string) => {
   let result;
   let error;
   try {
@@ -46,4 +47,15 @@ const getArticles = async (collectionName: string) => {
   return { result, error };
 };
 
-export { addArticle, getArticles, editArticle };
+const deleteData = async (collectionName: string, id: string) => {
+  let result;
+  let error;
+  try {
+    result = await deleteDoc(doc(db, collectionName, id));
+  } catch (e) {
+    error = e;
+  }
+  return { result, error };
+};
+
+export { addData, getDatas, editData, deleteData };
