@@ -94,6 +94,8 @@ const Register = () => {
   );
 };
 
-Register.Layout = (page: ReactElement) => <BlankLayout>{page}</BlankLayout>;
+Register.Layout = function Layout(page: ReactElement) {
+  <BlankLayout>{page}</BlankLayout>;
+};
 
 export default Register;

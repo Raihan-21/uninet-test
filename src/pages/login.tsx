@@ -99,7 +99,7 @@ const Login = () => {
             </VStack>
           </form>
           <Box marginTop={3}>
-            <Text>Don't have an account yet? Register </Text>
+            <Text>Don&apos;t have an account yet? Register </Text>
             <Link href="/register">
               <Text color={"blue"} textDecoration={"underline"}>
                 Here
@@ -111,7 +111,7 @@ const Login = () => {
     </Box>
   );
 };
-Login.Layout = (page: ReactElement) => {
+Login.Layout = function Layout(page: ReactElement) {
   return <BlankLayout>{page}</BlankLayout>;
 };
 
