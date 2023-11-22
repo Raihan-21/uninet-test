@@ -16,6 +16,7 @@ import {
   MenuList,
   Modal,
   ModalContent,
+  ModalOverlay,
   Text,
   Textarea,
   VStack,
@@ -145,7 +146,13 @@ export default function Home({ articleList }: { articleList: Article[] }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Box width={"100%"} marginTop={10} paddingX={20}>
+        <Box
+          width={"100%"}
+          marginTop={"20px"}
+          paddingX={20}
+          minHeight={"calc(100vh - 100px)"}
+          boxSizing="border-box"
+        >
           {/* <Button background={"green"} color={"white"} onClick={onOpen}>
             Add new article
           </Button> */}
@@ -158,6 +165,7 @@ export default function Home({ articleList }: { articleList: Article[] }) {
             onButtonClick={onAddOpen}
           />
           <Modal isCentered isOpen={isAddOpen} onClose={onAddClose}>
+            <ModalOverlay />
             <ModalContent padding={10}>
               <Text fontWeight={"bold"} fontSize={"larger"} marginBottom={5}>
                 Create new article
@@ -192,6 +200,7 @@ export default function Home({ articleList }: { articleList: Article[] }) {
             </ModalContent>
           </Modal>
           <Modal isCentered isOpen={isEditOpen} onClose={onEditClose}>
+            <ModalOverlay />
             <ModalContent padding={10}>
               <Text fontWeight={"bold"} fontSize={"larger"} marginBottom={5}>
                 Edit article
@@ -228,12 +237,14 @@ export default function Home({ articleList }: { articleList: Article[] }) {
             </ModalContent>
           </Modal>
           {isLoading ? (
-            <CircularProgress color="blue" />
+            <Flex justifyContent={"center"}>
+              <CircularProgress isIndeterminate color="darkcyan" />
+            </Flex>
           ) : (
             <VStack spacing={5}>
               {articles.length &&
-                articles.map((article: Article) => (
-                  <Card width={"100%"} padding={5}>
+                articles.map((article: Article, i: number) => (
+                  <Card width={"100%"} padding={5} key={i}>
                     <Flex justifyContent={"space-between"}>
                       <Text fontWeight={"bold"} fontSize={"large"}>
                         {article.title}
