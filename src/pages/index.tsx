@@ -63,7 +63,7 @@ export default function Home({ articleList }: { articleList: Article[] }) {
     title: "",
     content: "",
   });
-  const [articles, setArticles] = useState<Article[]>([]);
+  const [articles, setArticles] = useState<any>([]);
   const [selectedArticle, setSelectedArticle] = useState({
     id: "",
     title: "",
