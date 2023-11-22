@@ -171,31 +171,35 @@ export default function Home({ articleList }: { articleList: Article[] }) {
                 Create new article
               </Text>
               <form onSubmit={addArticle}>
-                <FormControl>
-                  <FormLabel>Title</FormLabel>
-                  <Input
-                    value={formData.title}
-                    onChange={(e) =>
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        title: e.target.value,
-                      }))
-                    }
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Content</FormLabel>
-                  <Textarea
-                    value={formData.content}
-                    onChange={(e) =>
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        content: e.target.value,
-                      }))
-                    }
-                  />
-                </FormControl>
-                <Button type="submit">Create article</Button>
+                <VStack spacing={5}>
+                  <FormControl>
+                    <FormLabel>Title</FormLabel>
+                    <Input
+                      value={formData.title}
+                      onChange={(e) =>
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          title: e.target.value,
+                        }))
+                      }
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Content</FormLabel>
+                    <Textarea
+                      value={formData.content}
+                      onChange={(e) =>
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          content: e.target.value,
+                        }))
+                      }
+                    />
+                  </FormControl>
+                </VStack>
+                <Button type="submit" marginTop={4}>
+                  Create article
+                </Button>
               </form>
             </ModalContent>
           </Modal>

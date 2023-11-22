@@ -23,7 +23,7 @@ import { FaChevronUp } from "react-icons/fa";
 
 import { motion } from "framer-motion";
 
-const bills = () => {
+const Bills = () => {
   const [datas, setDatas] = useState({
     status: 1,
     message: "Sukses",
@@ -138,6 +138,7 @@ const bills = () => {
         <FormControl>
           <FormLabel>Filter by DENOM</FormLabel>
           <Input
+            type="number"
             value={denom}
             onChange={(e) => setDenom(Number(e.target.value))}
           />
@@ -188,4 +189,4 @@ const bills = () => {
   );
 };
 
-export default bills;
+export default Bills;

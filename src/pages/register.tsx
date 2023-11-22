@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import React, { ReactElement, useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 
-const register = () => {
+const Register = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -94,6 +94,6 @@ const register = () => {
   );
 };
 
-register.Layout = (page: ReactElement) => <BlankLayout>{page}</BlankLayout>;
+Register.Layout = (page: ReactElement) => <BlankLayout>{page}</BlankLayout>;
 
-export default register;
+export default Register;

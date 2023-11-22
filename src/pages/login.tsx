@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { setCookie } from "cookies-next";
 import Link from "next/link";
 
-const login = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -111,8 +111,8 @@ const login = () => {
     </Box>
   );
 };
-login.Layout = (page: ReactElement) => {
+Login.Layout = (page: ReactElement) => {
   return <BlankLayout>{page}</BlankLayout>;
 };
 
-export default login;
+export default Login;
