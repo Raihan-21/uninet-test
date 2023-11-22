@@ -30,7 +30,7 @@ const Navbar = () => {
 
   return (
     <Box padding={5}>
-      <Flex justifyContent={"space-between"}>
+      <Flex justifyContent={"space-between"} alignItems={"center"}>
         <Text fontWeight={"bold"}>Uninet Media Sakti</Text>
         {isMobile ? (
           <MobileMenu />
@@ -40,7 +40,13 @@ const Navbar = () => {
               <Link href="/">Blog</Link>
               <Link href="/bills">Bills</Link>
             </Flex>
-            <Button onClick={logout}>Logout</Button>{" "}
+            <Button
+              onClick={logout}
+              backgroundColor={"red.600"}
+              color={"white"}
+            >
+              Logout
+            </Button>{" "}
           </>
         )}
       </Flex>

@@ -32,15 +32,23 @@ const inter = Inter({ subsets: ["latin"] });
 
 import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
+import { Timestamp } from "firebase/firestore";
+import moment from "moment";
 
 export const getServerSideProps = async () => {
   try {
     const res = await getDatas("articles");
 
+    const articleResult = res.result?.map((article: any) => ({
+      ...article,
+      created_at: article.created_at.toDate().toString(),
+    }));
+    console.log(articleResult);
     // console.log(JSON.stringify(res.result?.docs[0]));
+    // const ar
     return {
       props: {
-        articleList: res.result,
+        articleList: articleResult,
       },
     };
   } catch (error) {
@@ -148,10 +156,11 @@ export default function Home({ articleList }: { articleList: Article[] }) {
       <main>
         <Box
           width={"100%"}
-          marginTop={"20px"}
+          paddingTop={"20px"}
           paddingX={{ base: 10, sm: 20 }}
           minHeight={"calc(100vh - 100px)"}
           boxSizing="border-box"
+          backgroundColor={"secondary"}
         >
           {/* <Button background={"green"} color={"white"} onClick={onOpen}>
             Add new article
@@ -250,9 +259,14 @@ export default function Home({ articleList }: { articleList: Article[] }) {
                 articles.map((article: Article, i: number) => (
                   <Card width={"100%"} padding={5} key={i}>
                     <Flex justifyContent={"space-between"}>
-                      <Text fontWeight={"bold"} fontSize={"large"}>
-                        {article.title}
-                      </Text>
+                      <Box marginBottom={3}>
+                        <Text fontWeight={"bold"} fontSize={"large"}>
+                          {article.title}
+                        </Text>
+                        <Text fontSize={"small"}>
+                          {moment(article.created_at).format("LL")}
+                        </Text>
+                      </Box>
                       <Menu>
                         <MenuButton>
                           <BsThreeDots />

@@ -117,7 +117,12 @@ const Bills = () => {
     });
   }, [datas, denom]);
   return (
-    <Box marginTop={10} paddingX={{ base: 10, sm: 20 }} paddingBottom={10}>
+    <Box
+      paddingTop={10}
+      paddingX={{ base: 10, sm: 20 }}
+      paddingBottom={10}
+      backgroundColor={"secondary"}
+    >
       <SectionTitle title="Bills" />
       <Box marginBottom={5}>
         <Button variant={"nostyle"} onClick={onToggle}>
@@ -132,60 +137,62 @@ const Bills = () => {
           <Text>Inquiry ID: {datas.data.response.inquiryid}</Text>
           <Text>Billername: {datas.data.response.billername}</Text>
           <Text>Subscriber ID: {datas.data.response.subscriberid}</Text>
-        </Collapse>
-      </Box>
-      <Flex alignItems={"end"} columnGap={5} marginBottom={5}>
-        <FormControl>
-          <FormLabel>Filter by DENOM</FormLabel>
-          <Input
-            type="number"
-            value={denom}
-            onChange={(e) => setDenom(Number(e.target.value))}
-          />
-        </FormControl>
-        <Button onClick={filterData}>Filter</Button>
-      </Flex>
-      <Box overflowX={"auto"}>
-        <Table>
-          <Thead backgroundColor={"darkcyan"} color={"white"}>
-            <Tr>
-              <Th color={"white"}>ID</Th>
-              <Th color={"white"}>Title</Th>
-              <Th color={"white"}>Description</Th>
-              <Th color={"white"}>Admin Fee</Th>
-              <Th color={"white"}>Total Amount</Th>
-              <Th color={"white"}>DENOM</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {" "}
-            {filteredData.data.response.billdetails.map((bill, i) => (
-              <Tr key={i}>
-                <Td>{bill.billid}</Td>
-                <Td>{bill.title}</Td>
-                <Td>{bill.descriptions ?? "-"}</Td>
-                <Td>
-                  {new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  }).format(Number(bill.adminfee))}
-                </Td>
-                <Td>
-                  {new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  }).format(Number(bill.totalamount))}
-                </Td>
-                <Td>
-                  {new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  }).format(Number(bill.body.DENOM))}
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
+        </Collapse>{" "}
+        <Box padding={5} background={"white"} borderRadius={10} marginTop={5}>
+          <Flex alignItems={"end"} columnGap={5} marginBottom={5}>
+            <FormControl>
+              <FormLabel>Filter by DENOM</FormLabel>
+              <Input
+                type="number"
+                value={denom}
+                onChange={(e) => setDenom(Number(e.target.value))}
+              />
+            </FormControl>
+            <Button onClick={filterData}>Filter</Button>
+          </Flex>
+          <Box overflowX={"auto"}>
+            <Table>
+              <Thead backgroundColor={"darkcyan"} color={"white"}>
+                <Tr>
+                  <Th color={"white"}>ID</Th>
+                  <Th color={"white"}>Title</Th>
+                  <Th color={"white"}>Description</Th>
+                  <Th color={"white"}>Admin Fee</Th>
+                  <Th color={"white"}>Total Amount</Th>
+                  <Th color={"white"}>DENOM</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {" "}
+                {filteredData.data.response.billdetails.map((bill, i) => (
+                  <Tr key={i}>
+                    <Td>{bill.billid}</Td>
+                    <Td>{bill.title}</Td>
+                    <Td>{bill.descriptions ?? "-"}</Td>
+                    <Td>
+                      {new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      }).format(Number(bill.adminfee))}
+                    </Td>
+                    <Td>
+                      {new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      }).format(Number(bill.totalamount))}
+                    </Td>
+                    <Td>
+                      {new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      }).format(Number(bill.body.DENOM))}
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

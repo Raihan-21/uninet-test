@@ -8,6 +8,7 @@ import {
   query,
   setDoc,
   deleteDoc,
+  Timestamp,
 } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
@@ -16,7 +17,10 @@ const addData = async (collectionName: string, data: any) => {
   let result = null;
   let error = null;
   try {
-    result = await addDoc(collection(db, collectionName), data);
+    result = await addDoc(collection(db, collectionName), {
+      ...data,
+      created_at: Timestamp.fromDate(new Date()),
+    });
     console.log(result);
   } catch (e) {
     error = e;

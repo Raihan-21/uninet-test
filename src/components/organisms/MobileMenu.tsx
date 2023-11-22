@@ -6,6 +6,7 @@ import {
   MenuList,
   Link,
   Button,
+  Text,
 } from "@chakra-ui/react";
 import React, { useCallback } from "react";
 
@@ -38,7 +39,9 @@ const MobileMenu = () => {
             <MenuItem>Bills</MenuItem>
           </Link>
           <MenuItem onClick={logout}>
-            <Box>Logout</Box>
+            <Box>
+              <Text color={"red"}>Logout</Text>
+            </Box>
           </MenuItem>
         </MenuList>
       </Menu>
