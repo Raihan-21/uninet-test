@@ -56,6 +56,7 @@ const Register = () => {
               <FormControl isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input
+                  name="email"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData((prevState) => ({
@@ -68,6 +69,7 @@ const Register = () => {
               <FormControl isRequired>
                 <FormLabel>Password</FormLabel>
                 <Input
+                  name="password"
                   type="password"
                   value={formData.password}
                   onChange={(e) =>

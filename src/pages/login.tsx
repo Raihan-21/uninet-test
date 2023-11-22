@@ -66,6 +66,7 @@ const Login = () => {
               <FormControl isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input
+                  name="email"
                   value={formData.email}
                   onChange={(e) =>
                     setFormData((prevState) => ({
@@ -79,6 +80,7 @@ const Login = () => {
                 <FormLabel>Password</FormLabel>
                 <Input
                   type="password"
+                  name="password"
                   value={formData.password}
                   onChange={(e) =>
                     setFormData((prevState) => ({
