@@ -7,6 +7,7 @@ import {
   FormLabel,
   Input,
   Text,
+  VStack,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -16,6 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BlankLayout from "@/components/templates/blank";
 import { useRouter } from "next/router";
 import { setCookie } from "cookies-next";
+import Link from "next/link";
 
 const login = () => {
   const [formData, setFormData] = useState({
@@ -40,48 +42,70 @@ const login = () => {
         setTimeout(() => {
           router.push("/");
         }, 500);
-      } catch (error) {
-        throw error;
+      } catch (error: any) {
+        toast({ title: error.response.data.error, status: "error" });
+        // throw error;
       }
     },
     [formData]
   );
   return (
-    <Box minHeight={"100vh"}>
+    <Box height={"100vh"}>
       <Flex justifyContent={"center"} alignItems={"center"} height={"100%"}>
-        <Box borderRadius={10} border={"1px solid black"} height={"100%"}>
-          <Text fontWeight={"bold"} padding={10}>
+        <Box
+          borderRadius={10}
+          border={"1px solid black"}
+          padding={5}
+          minWidth={"330px"}
+        >
+          <Text fontWeight={"bold"} fontSize={20} marginBottom={6}>
             Login
           </Text>
           <form onSubmit={submitForm}>
-            <FormControl>
-              <FormLabel>Email</FormLabel>
-              <Input
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    email: e.target.value,
-                  }))
-                }
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Password</FormLabel>
-              <Input
-                type="password"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    password: e.target.value,
-                  }))
-                }
-              />
-              <Button type="submit">Login</Button>
-            </FormControl>
+            <VStack spacing={5}>
+              <FormControl isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      email: e.target.value,
+                    }))
+                  }
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Password</FormLabel>
+                <Input
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      password: e.target.value,
+                    }))
+                  }
+                />
+                <Button
+                  type="submit"
+                  backgroundColor={"darkcyan"}
+                  color={"white"}
+                  marginTop={4}
+                >
+                  Login
+                </Button>
+              </FormControl>
+            </VStack>
           </form>
-          <Text>{token}</Text>
+          <Box marginTop={3}>
+            <Text>Don't have an account yet? Register </Text>
+            <Link href="/register">
+              <Text color={"blue"} textDecoration={"underline"}>
+                Here
+              </Text>
+            </Link>
+          </Box>
         </Box>
       </Flex>
     </Box>

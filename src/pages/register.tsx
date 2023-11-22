@@ -8,6 +8,7 @@ import {
   FormLabel,
   Input,
   Text,
+  VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -39,39 +40,53 @@ const register = () => {
     [formData]
   );
   return (
-    <Box minHeight={"100vh"}>
+    <Box height={"100vh"}>
       <Flex justifyContent={"center"} alignItems={"center"} height={"100%"}>
-        <Box borderRadius={10} border={"1px solid black"} height={"100%"}>
-          <Text fontWeight={"bold"} padding={10}>
-            Login
+        <Box
+          borderRadius={10}
+          border={"1px solid black"}
+          padding={5}
+          minWidth={"330px"}
+        >
+          <Text fontWeight={"bold"} fontSize={20} marginBottom={6}>
+            Register
           </Text>
           <form onSubmit={submitForm}>
-            <FormControl>
-              <FormLabel>Email</FormLabel>
-              <Input
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    email: e.target.value,
-                  }))
-                }
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Password</FormLabel>
-              <Input
-                type="password"
-                value={formData.password}
-                onChange={(e) =>
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    password: e.target.value,
-                  }))
-                }
-              />
-              <Button type="submit">Login</Button>
-            </FormControl>
+            <VStack spacing={5}>
+              <FormControl isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      email: e.target.value,
+                    }))
+                  }
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel>Password</FormLabel>
+                <Input
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      password: e.target.value,
+                    }))
+                  }
+                />
+              </FormControl>
+            </VStack>
+            <Button
+              type="submit"
+              backgroundColor={"darkcyan"}
+              color={"white"}
+              marginTop={4}
+            >
+              Register
+            </Button>
           </form>
         </Box>
       </Flex>
