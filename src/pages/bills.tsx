@@ -158,8 +158,8 @@ const Bills = () => {
         </Thead>
         <Tbody>
           {" "}
-          {filteredData.data.response.billdetails.map((bill) => (
-            <Tr>
+          {filteredData.data.response.billdetails.map((bill, i) => (
+            <Tr key={i}>
               <Td>{bill.billid}</Td>
               <Td>{bill.title}</Td>
               <Td>{bill.descriptions ?? "-"}</Td>
