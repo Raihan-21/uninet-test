@@ -1,10 +1,9 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
 import {
   Box,
   Button,
+  Card,
   FormControl,
   FormLabel,
   Input,
@@ -13,17 +12,54 @@ import {
   Text,
   Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { addArticle, getArticles } from "@/helpers/firebase";
+import SectionTitle from "@/components/molecules/SectionTitle";
+import { Article } from "@/types/data";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export const getServerSideProps = async () => {
+  try {
+    const res = await getArticles("articles");
+
+    // console.log(JSON.stringify(res.result?.docs[0]));
+    return {
+      props: {
+        articles: res.result,
+      },
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export default function Home({ articles }: { articles: Article[] }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [formData, setFormData] = useState({
     title: "",
     content: "",
   });
+  const toast = useToast();
+  const submitForm = useCallback(
+    async (e: any) => {
+      e.preventDefault();
+      try {
+        const { result } = await addArticle("articles", formData);
+        setFormData({ title: "", content: "" });
+        onClose();
+        toast({
+          title: "Berhasil membuat artikel",
+          status: "success",
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+    [formData]
+  );
   return (
     <>
       <Head>
@@ -32,17 +68,25 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <Box>
-          <Button background={"green"} color={"white"} onClick={onOpen}>
+      <main>
+        <Box width={"100%"} marginTop={20} paddingX={20}>
+          {/* <Button background={"green"} color={"white"} onClick={onOpen}>
             Add new article
-          </Button>
+          </Button> */}
+          <SectionTitle
+            title="My blog posts"
+            withButton
+            buttonText="Add new article"
+            buttonColor="green"
+            buttonTextColor="white"
+            onButtonClick={onOpen}
+          />
           <Modal isCentered isOpen={isOpen} onClose={onClose}>
             <ModalContent padding={10}>
               <Text fontWeight={"bold"} fontSize={"larger"} marginBottom={5}>
                 Create new article
               </Text>
-              <form action="">
+              <form onSubmit={submitForm}>
                 <FormControl>
                   <FormLabel>Title</FormLabel>
                   <Input
@@ -66,9 +110,17 @@ export default function Home() {
                     }
                   />
                 </FormControl>
+                <Button type="submit">Create article</Button>
               </form>
             </ModalContent>
           </Modal>
+          {articles.length &&
+            articles.map((article: Article) => (
+              <Card>
+                <Text>{article.title}</Text>
+                <Text>{article.content}</Text>
+              </Card>
+            ))}
         </Box>
       </main>
     </>
