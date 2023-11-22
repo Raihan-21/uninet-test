@@ -20,7 +20,9 @@ const DefaultLayout = ({ children }: { children: any }) => {
       router.replace("/login");
     }
 
-    setIsLoading(false);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
   }, []);
 
   // const checkAuth = () => {

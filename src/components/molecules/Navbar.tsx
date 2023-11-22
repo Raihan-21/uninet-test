@@ -1,24 +1,13 @@
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState } from "react";
-import { deleteCookie } from "cookies-next";
+import { Box, Flex, Text } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setIsLoggedIn, setToken } from "@/store/auth";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import MobileMenu from "../organisms/MobileMenu";
+import DesktopMenu from "../organisms/DesktopMenu";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-
   const [isMobile, setIsMobile] = useState(window.innerWidth < 400);
 
-  const logout = useCallback(() => {
-    deleteCookie("uninet-token");
-    dispatch(setIsLoggedIn(false));
-    dispatch(setToken(""));
-    router.push("/login");
-  }, []);
   const updateMedia = () => {
     setIsMobile(window.innerWidth < 400);
   };
@@ -32,23 +21,7 @@ const Navbar = () => {
     <Box padding={5}>
       <Flex justifyContent={"space-between"} alignItems={"center"}>
         <Text fontWeight={"bold"}>Uninet Media Sakti</Text>
-        {isMobile ? (
-          <MobileMenu />
-        ) : (
-          <>
-            <Flex columnGap={5}>
-              <Link href="/">Blog</Link>
-              <Link href="/bills">Bills</Link>
-            </Flex>
-            <Button
-              onClick={logout}
-              backgroundColor={"red.600"}
-              color={"white"}
-            >
-              Logout
-            </Button>{" "}
-          </>
-        )}
+        {isMobile ? <MobileMenu /> : <DesktopMenu />}
       </Flex>
     </Box>
   );
