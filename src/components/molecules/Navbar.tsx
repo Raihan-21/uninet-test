@@ -4,6 +4,7 @@ import { deleteCookie } from "cookies-next";
 import { useDispatch } from "react-redux";
 import { setIsLoggedIn, setToken } from "@/store/auth";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -15,9 +16,13 @@ const Navbar = () => {
     router.push("/login");
   }, []);
   return (
-    <Box>
+    <Box padding={5}>
       <Flex justifyContent={"space-between"}>
-        <Text>Navbar</Text>
+        <Text fontWeight={"bold"}>Uninet Media Sakti</Text>
+        <Flex columnGap={5}>
+          <Link href="/">Blog</Link>
+          <Link href="/bills">Bills</Link>
+        </Flex>
         <Button onClick={logout}>Logout</Button>
       </Flex>
     </Box>

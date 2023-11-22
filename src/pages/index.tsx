@@ -145,7 +145,7 @@ export default function Home({ articleList }: { articleList: Article[] }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Box width={"100%"} marginTop={20} paddingX={20}>
+        <Box width={"100%"} marginTop={10} paddingX={20}>
           {/* <Button background={"green"} color={"white"} onClick={onOpen}>
             Add new article
           </Button> */}
