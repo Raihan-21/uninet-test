@@ -17,7 +17,7 @@ const SectionTitle = ({
   onButtonClick?: () => void;
 }) => {
   return (
-    <Flex justifyContent={"space-between"} width={"100%"}>
+    <Flex justifyContent={"space-between"} width={"100%"} marginBottom={5}>
       <Text fontWeight={"bold"} fontSize={"x-large"}>
         {title}
       </Text>

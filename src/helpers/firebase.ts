@@ -6,6 +6,7 @@ import {
   collection,
   getDocs,
   query,
+  setDoc,
 } from "firebase/firestore";
 
 const db = getFirestore(firebaseApp);
@@ -16,6 +17,17 @@ const addArticle = async (collectionName: string, data: any) => {
   try {
     result = await addDoc(collection(db, collectionName), data);
     console.log(result);
+  } catch (e) {
+    error = e;
+  }
+  return { result, error };
+};
+
+const editArticle = async (collectionName: string, id: string, data: any) => {
+  let result;
+  let error;
+  try {
+    result = await setDoc(doc(db, collectionName, id), data, { merge: true });
   } catch (e) {
     error = e;
   }
@@ -34,4 +46,4 @@ const getArticles = async (collectionName: string) => {
   return { result, error };
 };
 
-export { addArticle, getArticles };
+export { addArticle, getArticles, editArticle };

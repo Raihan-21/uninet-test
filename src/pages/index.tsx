@@ -4,22 +4,33 @@ import {
   Box,
   Button,
   Card,
+  CircularProgress,
+  Flex,
   FormControl,
   FormLabel,
+  HStack,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalContent,
   Text,
   Textarea,
+  VStack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useCallback, useState } from "react";
-import { addArticle, getArticles } from "@/helpers/firebase";
+import { useCallback, useState, useEffect } from "react";
+import { addArticle, editArticle, getArticles } from "@/helpers/firebase";
 import SectionTitle from "@/components/molecules/SectionTitle";
 import { Article } from "@/types/data";
 
 const inter = Inter({ subsets: ["latin"] });
+
+import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
+import { BsThreeDots } from "react-icons/bs";
 
 export const getServerSideProps = async () => {
   try {
@@ -28,7 +39,7 @@ export const getServerSideProps = async () => {
     // console.log(JSON.stringify(res.result?.docs[0]));
     return {
       props: {
-        articles: res.result,
+        articleList: res.result,
       },
     };
   } catch (error) {
@@ -36,12 +47,32 @@ export const getServerSideProps = async () => {
   }
 };
 
-export default function Home({ articles }: { articles: Article[] }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+export default function Home({ articleList }: { articleList: Article[] }) {
+  const {
+    isOpen: isAddOpen,
+    onOpen: onAddOpen,
+    onClose: onAddClose,
+  } = useDisclosure();
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
   const [formData, setFormData] = useState({
     title: "",
     content: "",
   });
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [selectedArticle, setSelectedArticle] = useState({
+    id: "",
+    title: "",
+    content: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    setArticles(articleList);
+  }, []);
+
   const toast = useToast();
   const submitForm = useCallback(
     async (e: any) => {
@@ -49,7 +80,7 @@ export default function Home({ articles }: { articles: Article[] }) {
       try {
         const { result } = await addArticle("articles", formData);
         setFormData({ title: "", content: "" });
-        onClose();
+        onAddClose();
         toast({
           title: "Berhasil membuat artikel",
           status: "success",
@@ -60,6 +91,32 @@ export default function Home({ articles }: { articles: Article[] }) {
     },
     [formData]
   );
+  const editForm = useCallback(
+    async (e: any) => {
+      e.preventDefault();
+      try {
+        onEditClose();
+        const res = await editArticle(
+          "articles",
+          selectedArticle.id,
+          selectedArticle
+        );
+        toast({
+          title: "Article Edited",
+          status: "success",
+        });
+        setIsLoading(true);
+        const getRes = await getArticles("articles");
+        setArticles(getRes.result);
+      } catch (error) {
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [selectedArticle]
+  );
+  // const
   return (
     <>
       <Head>
@@ -79,9 +136,9 @@ export default function Home({ articles }: { articles: Article[] }) {
             buttonText="Add new article"
             buttonColor="green"
             buttonTextColor="white"
-            onButtonClick={onOpen}
+            onButtonClick={onAddOpen}
           />
-          <Modal isCentered isOpen={isOpen} onClose={onClose}>
+          <Modal isCentered isOpen={isAddOpen} onClose={onAddClose}>
             <ModalContent padding={10}>
               <Text fontWeight={"bold"} fontSize={"larger"} marginBottom={5}>
                 Create new article
@@ -102,6 +159,7 @@ export default function Home({ articles }: { articles: Article[] }) {
                 <FormControl>
                   <FormLabel>Content</FormLabel>
                   <Textarea
+                    value={formData.content}
                     onChange={(e) =>
                       setFormData((prevState) => ({
                         ...prevState,
@@ -114,13 +172,83 @@ export default function Home({ articles }: { articles: Article[] }) {
               </form>
             </ModalContent>
           </Modal>
-          {articles.length &&
-            articles.map((article: Article) => (
-              <Card>
-                <Text>{article.title}</Text>
-                <Text>{article.content}</Text>
-              </Card>
-            ))}
+          <Modal isCentered isOpen={isEditOpen} onClose={onEditClose}>
+            <ModalContent padding={10}>
+              <Text fontWeight={"bold"} fontSize={"larger"} marginBottom={5}>
+                Edit article
+              </Text>
+              <form onSubmit={editForm}>
+                <VStack spacing={5} alignItems={"start"}>
+                  <FormControl>
+                    <FormLabel>Title</FormLabel>
+                    <Input
+                      value={selectedArticle.title}
+                      onChange={(e) =>
+                        setSelectedArticle((prevState) => ({
+                          ...prevState,
+                          title: e.target.value,
+                        }))
+                      }
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Content</FormLabel>
+                    <Textarea
+                      value={selectedArticle.content}
+                      onChange={(e) =>
+                        setSelectedArticle((prevState) => ({
+                          ...prevState,
+                          content: e.target.value,
+                        }))
+                      }
+                    />
+                  </FormControl>
+                  <Button type="submit">Save article</Button>
+                </VStack>
+              </form>
+            </ModalContent>
+          </Modal>
+          {isLoading ? (
+            <CircularProgress color="blue" />
+          ) : (
+            <VStack spacing={5}>
+              {articles.length &&
+                articles.map((article: Article) => (
+                  <Card width={"100%"} padding={5}>
+                    <Flex justifyContent={"space-between"}>
+                      <Text fontWeight={"bold"} fontSize={"large"}>
+                        {article.title}
+                      </Text>
+                      <Menu>
+                        <MenuButton>
+                          <BsThreeDots />
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem
+                            onClick={() => {
+                              onEditOpen();
+                              setSelectedArticle(article);
+                            }}
+                          >
+                            <Flex alignItems={"center"} columnGap={2}>
+                              <FaRegEdit />
+                              <Text>Edit</Text>
+                            </Flex>
+                          </MenuItem>
+                          <MenuItem>
+                            <Flex alignItems={"center"} columnGap={2}>
+                              <FaRegTrashAlt color="red" />
+                              <Text color={"red"}>Delete</Text>
+                            </Flex>
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                    </Flex>
+                    <Text>{article.content}</Text>
+                  </Card>
+                ))}
+            </VStack>
+          )}
         </Box>
       </main>
     </>
