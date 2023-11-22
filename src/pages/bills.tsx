@@ -117,7 +117,7 @@ const Bills = () => {
     });
   }, [datas, denom]);
   return (
-    <Box marginTop={10} paddingX={20} paddingBottom={10}>
+    <Box marginTop={10} paddingX={{ base: 10, sm: 20 }} paddingBottom={10}>
       <SectionTitle title="Bills" />
       <Box marginBottom={5}>
         <Button variant={"nostyle"} onClick={onToggle}>
@@ -145,46 +145,48 @@ const Bills = () => {
         </FormControl>
         <Button onClick={filterData}>Filter</Button>
       </Flex>
-      <Table>
-        <Thead backgroundColor={"darkcyan"} color={"white"}>
-          <Tr>
-            <Th color={"white"}>ID</Th>
-            <Th color={"white"}>Title</Th>
-            <Th color={"white"}>Description</Th>
-            <Th color={"white"}>Admin Fee</Th>
-            <Th color={"white"}>Total Amount</Th>
-            <Th color={"white"}>DENOM</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {" "}
-          {filteredData.data.response.billdetails.map((bill, i) => (
-            <Tr key={i}>
-              <Td>{bill.billid}</Td>
-              <Td>{bill.title}</Td>
-              <Td>{bill.descriptions ?? "-"}</Td>
-              <Td>
-                {new Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                }).format(Number(bill.adminfee))}
-              </Td>
-              <Td>
-                {new Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                }).format(Number(bill.totalamount))}
-              </Td>
-              <Td>
-                {new Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                }).format(Number(bill.body.DENOM))}
-              </Td>
+      <Box overflowX={"auto"}>
+        <Table>
+          <Thead backgroundColor={"darkcyan"} color={"white"}>
+            <Tr>
+              <Th color={"white"}>ID</Th>
+              <Th color={"white"}>Title</Th>
+              <Th color={"white"}>Description</Th>
+              <Th color={"white"}>Admin Fee</Th>
+              <Th color={"white"}>Total Amount</Th>
+              <Th color={"white"}>DENOM</Th>
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
+          </Thead>
+          <Tbody>
+            {" "}
+            {filteredData.data.response.billdetails.map((bill, i) => (
+              <Tr key={i}>
+                <Td>{bill.billid}</Td>
+                <Td>{bill.title}</Td>
+                <Td>{bill.descriptions ?? "-"}</Td>
+                <Td>
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  }).format(Number(bill.adminfee))}
+                </Td>
+                <Td>
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  }).format(Number(bill.totalamount))}
+                </Td>
+                <Td>
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  }).format(Number(bill.body.DENOM))}
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
     </Box>
   );
 };

@@ -149,7 +149,7 @@ export default function Home({ articleList }: { articleList: Article[] }) {
         <Box
           width={"100%"}
           marginTop={"20px"}
-          paddingX={20}
+          paddingX={{ base: 10, sm: 20 }}
           minHeight={"calc(100vh - 100px)"}
           boxSizing="border-box"
         >
