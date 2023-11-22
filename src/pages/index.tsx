@@ -2,11 +2,28 @@ import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
-import { Box, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalContent,
+  Text,
+  Textarea,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [formData, setFormData] = useState({
+    title: "",
+    content: "",
+  });
   return (
     <>
       <Head>
@@ -17,7 +34,41 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <Box>
-          <Text color={"red"}>Tes</Text>
+          <Button background={"green"} color={"white"} onClick={onOpen}>
+            Add new article
+          </Button>
+          <Modal isCentered isOpen={isOpen} onClose={onClose}>
+            <ModalContent padding={10}>
+              <Text fontWeight={"bold"} fontSize={"larger"} marginBottom={5}>
+                Create new article
+              </Text>
+              <form action="">
+                <FormControl>
+                  <FormLabel>Title</FormLabel>
+                  <Input
+                    value={formData.title}
+                    onChange={(e) =>
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        title: e.target.value,
+                      }))
+                    }
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Content</FormLabel>
+                  <Textarea
+                    onChange={(e) =>
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        content: e.target.value,
+                      }))
+                    }
+                  />
+                </FormControl>
+              </form>
+            </ModalContent>
+          </Modal>
         </Box>
       </main>
     </>

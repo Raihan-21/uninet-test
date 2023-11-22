@@ -1,3 +1,4 @@
+import BlankLayout from "@/components/templates/blank";
 import { setIsLoggedIn, setToken } from "@/store/auth";
 import {
   Box,
@@ -7,39 +8,30 @@ import {
   FormLabel,
   Input,
   Text,
-  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { ReactElement, useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import BlankLayout from "@/components/templates/blank";
 import { useRouter } from "next/router";
-import { setCookie } from "cookies-next";
+import React, { ReactElement, useCallback, useState } from "react";
+import { useDispatch } from "react-redux";
 
-const login = () => {
+const register = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const toast = useToast();
-
-  const token = useSelector((state: any) => state.auth.token);
-  const dispatch = useDispatch();
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const submitForm = useCallback(
     async (e: any) => {
       e.preventDefault();
       try {
-        const res = await axios.post("https://reqres.in/api/login", formData);
-        toast({ title: "Login success", status: "success" });
+        const res = await axios.post(
+          "https://reqres.in/api/register",
+          formData
+        );
         dispatch(setIsLoggedIn(true));
         dispatch(setToken(res.data.token));
-        setCookie("uninet-token", res.data.token);
-        setTimeout(() => {
-          router.push("/");
-        }, 500);
+        router.push("/");
       } catch (error) {
         throw error;
       }
@@ -81,14 +73,12 @@ const login = () => {
               <Button type="submit">Login</Button>
             </FormControl>
           </form>
-          <Text>{token}</Text>
         </Box>
       </Flex>
     </Box>
   );
 };
-login.Layout = (page: ReactElement) => {
-  return <BlankLayout>{page}</BlankLayout>;
-};
 
-export default login;
+register.Layout = (page: ReactElement) => <BlankLayout>{page}</BlankLayout>;
+
+export default register;
